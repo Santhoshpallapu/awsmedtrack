@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Medication Tracker</h2>
+    
+    <!-- Add Medication Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Add New Medication</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('add_medication') }}">
+                <div class="mb-3">
+                    <label for="medication_name" class="form-label">Medication Name</label>
+                    <input type="text" class="form-control" id="medication_name" name="medication_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dosage" class="form-label">Dosage</label>
+                    <input type="text" class="form-control" id="dosage" name="dosage" required>
+                </div>
+                <div class="mb-3">
+                    <label for="frequency" class="form-label">Frequency (per day)</label>
+                    <input type="number" class="form-control" id="frequency" name="frequency" min="1" required>
+                </div>
+                <div class="mb-3">
+                    <label for="start_date" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="end_date" class="form-label">End Date (optional)</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Medication</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Medication List -->
+    <div class="card">
+        <div class="card-header">
+            <h5>Your Medications</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Medication Name</th>
+                            <th>Dosage</th>
+                            <th>Frequency</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for medication in medications %}
+                        <tr>
+                            <td>{{ medication.name }}</td>
+                            <td>{{ medication.dosage }}</td>
+                            <td>{{ medication.frequency }} times/day</td>
+                            <td>{{ medication.start_date }}</td>
+                            <td>{{ medication.end_date if medication.end_date else 'Ongoing' }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning" onclick="editMedication('{{ medication.id }}')">Edit</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteMedication('{{ medication.id }}')">Delete</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function editMedication(id) {
+    // Implement edit functionality
+}
+
+function deleteMedication(id) {
+    if (confirm('Are you sure you want to delete this medication?')) {
+        // Implement delete functionality
+    }
+}
+</script>
+{% endblock %}

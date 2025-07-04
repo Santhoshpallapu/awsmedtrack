@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 mb-3">
+        <a href="{{ url_for('medication_tracker') }}" class="btn btn-primary btn-lg w-100">
+            <i class="fas fa-pills me-2"></i>Medication Tracker
+        </a>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Your Appointments</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Doctor Name</th>
+                            <th>Appointment Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                        <tr>
+                            <td>{{ appointment.doctor_name }}</td>
+                            <td>{{ appointment.appointment_date }}</td>
+                            <td>
+                                {% if appointment.status == 'pending' %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% elif appointment.status == 'completed' %}
+                                    <span class="badge bg-success">Completed</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if appointment.status == 'completed' %}
+                                    <a href="{{ url_for('view_appointment', appointment_id=appointment.appointment_id) }}" 
+                                       class="btn btn-sm btn-primary">View Details</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Book New Appointment</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('book_appointment') }}">
+                    <div class="mb-3">
+                        <label for="doctor" class="form-label">Select Doctor</label>
+                        <select class="form-select" id="doctor" name="doctor_email" required>
+                            {% for doctor in doctors %}
+                            <option value="{{ doctor.email }}">Dr. {{ doctor.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="appointment_date" class="form-label">Appointment Date</label>
+                        <input type="date" class="form-control" id="appointment_date" name="appointment_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="symptoms" class="form-label">Symptoms</label>
+                        <textarea class="form-control" id="symptoms" name="symptoms" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Book Appointment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
